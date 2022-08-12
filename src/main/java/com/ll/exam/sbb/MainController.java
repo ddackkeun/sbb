@@ -3,6 +3,9 @@ package com.ll.exam.sbb;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.net.http.HttpRequest;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -70,7 +73,7 @@ public class MainController {
 
         Integer finalDan = dan;
         return IntStream.rangeClosed(1, limit)
-                .mapToObj(i -> "%d * %d = %d".formatted(finalDan, i, finalDan *i))
+                .mapToObj(i -> "%d * %d = %d".formatted(finalDan, i, finalDan * i))
                 .collect(Collectors.joining("<br>"));
     }
 
@@ -86,4 +89,21 @@ public class MainController {
         return result;
     }
 
+    @ResponseBody
+    @GetMapping("/saveSession/{name}/{value}")
+    public String saveSession(@PathVariable String name,
+                              @PathVariable String value,
+                              HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute(name, value);
+
+        return "세션 변수 %s의 값이 %s로 설정되었습니다.".formatted(name, value);
+    }
+
+    @ResponseBody
+    @GetMapping("/getSession/{name}")
+    public String getSession(@PathVariable String name, HttpSession session) {
+        String value = (String) session.getAttribute(name);
+        return "세션변수 %s의 값이 %s 입니다.".formatted(name, value);
+    }
 }
