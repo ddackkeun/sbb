@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.http.HttpRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -105,5 +108,51 @@ public class MainController {
     public String getSession(@PathVariable String name, HttpSession session) {
         String value = (String) session.getAttribute(name);
         return "세션변수 %s의 값이 %s 입니다.".formatted(name, value);
+    }
+
+
+    private List<Article> articles = new ArrayList<>(
+            Arrays.asList(new Article("제목", "내용"), new Article("제목", "내용"))
+    );
+    // asList의 결과 값은 immutable(수정할 수 없는) 리스트이다.
+    // ArrayList 로 감싸면 mutable로 바뀐다.
+
+    @ResponseBody
+    @GetMapping("/addArticle")
+    public String addArticle(String title, String body) {
+        Article article = new Article(title, body);
+        articles.add(article);
+
+        return "%d번 게시물이 생성되었습니다.".formatted(article.getId());
+    }
+
+    @ResponseBody
+    @GetMapping("/article/{id}")
+    public Article getArticle(@PathVariable int id) {
+        Article article = articles
+                    .stream()
+                    .filter(a -> a.getId() == id)
+                    .findFirst()
+                    .get();
+        return article;
+    }
+
+    @ResponseBody
+    @GetMapping("/modifyArticle/{id}")
+    public String modifyArticle(@PathVariable int id, String title, String body) {
+        Article article = articles
+                .stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .get();
+
+        if (article == null) {
+            return "%d번 게시물은 존재하지 않습니다.".formatted(id);
+        }
+
+        article.setTitle(title);
+        article.setBody(body);
+
+        return "%d번 게시물을 수정하였습니다.".formatted(id);
     }
 }
