@@ -130,10 +130,10 @@ public class MainController {
     @GetMapping("/article/{id}")
     public Article getArticle(@PathVariable int id) {
         Article article = articles
-                    .stream()
-                    .filter(a -> a.getId() == id)
-                    .findFirst()
-                    .orElse(null);
+                .stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .orElse(null);
 
         return article;
     }
@@ -155,5 +155,32 @@ public class MainController {
         article.setBody(body);
 
         return "%d번 게시물을 수정하였습니다.".formatted(id);
+    }
+
+    @ResponseBody
+    @GetMapping("/deleteArticle/{id}")
+    public String deleteArticle(@PathVariable int id) {
+        Article article = articles
+                .stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        if (article == null) {
+            return "%d번 게시물은 존재하지 않습니다.".formatted(id);
+        }
+
+        articles.remove(article);
+
+        return "%d번 게시물을 삭제하였습니다.".formatted(article.getId());
+    }
+
+    @ResponseBody
+    @GetMapping("/addPerson/{id}")
+    public Person addPerson(Person person) {
+        // Param 값으로 들어온 것을
+        // @ModelAttribute 로 객체를 자동 매핑해준다.
+        // PathVariable의 값도 쓰지 않아도 자동으로 매핑해서 넣어준다.
+        return person;
     }
 }
