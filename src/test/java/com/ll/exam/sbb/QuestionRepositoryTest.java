@@ -124,7 +124,7 @@ class QuestionRepositoryTest {
 	}
 
 	@Test
-	void testJpa5() {
+	void findBySubjectLike() {
 		List<Question> qList = questionRepository.findBySubjectLike("sbb%");
         Question question = qList.get(0);
 

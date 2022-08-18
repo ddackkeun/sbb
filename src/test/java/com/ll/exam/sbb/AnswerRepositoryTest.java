@@ -5,8 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,5 +86,20 @@ class AnswerRepositoryTest {
 
         Question question = a.getQuestion();
         assertThat(question.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    void question으로_관련된_answer_조회() {
+        // Transactional이 없으면 question 가져오면서 DB연결이 끊어짐
+        Question q = questionRepository.findById(1L).get();
+        // SELECT * FROM question WHERE id = 1
+
+        List<Answer> answerList = q.getAnswerList();
+        // SELECT * FROM answer WHERE question_id = 1
+
+        assertThat(answerList.size()).isEqualTo(2);
+        assertThat(answerList.get(0).getContent()).isEqualTo("sbb는 질문답변 게시판 입니다.");
     }
 }
