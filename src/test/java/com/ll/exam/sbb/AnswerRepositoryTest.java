@@ -29,13 +29,28 @@ class AnswerRepositoryTest {
 
     private void clearData() {
         QuestionRepositoryTest.clearData(questionRepository);
-        answerRepository.disableForeignKeyChecks();
-        answerRepository.truncate();
-        answerRepository.enableForeignKeyChecks();
+
+        answerRepository.deleteAll();
+        answerRepository.truncateTable();
     }
 
     private void createSampleData() {
         QuestionRepositoryTest.createSampleData(questionRepository);
+
+        Question q = questionRepository.findById(1L).get();
+
+        Answer a1 = new Answer();
+        a1.setContent("sbb는 질문답변 게시판 입니다.");
+        a1.setQuestion(q);
+        a1.setCreateDate(LocalDateTime.now());
+        answerRepository.save(a1);
+
+        Answer a2 = new Answer();
+        a2.setContent("sbb에서는 주로 스프링부트 관련 내용을 다룹니다.");
+        a2.setQuestion(q);
+        a2.setCreateDate(LocalDateTime.now());
+        answerRepository.save(a2);
+
     }
 
     @Test
@@ -49,5 +64,24 @@ class AnswerRepositoryTest {
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
         answerRepository.save(answer);
+    }
+
+    @Test
+    void 조회() {
+        Question q = questionRepository.findById(1L).get();
+
+        Optional<Answer> oa = this.answerRepository.findById(1L);
+        assertThat(oa.isPresent()).isTrue();
+        Answer a = oa.get();
+
+        Assertions.assertThat(a.getContent()).isEqualTo("sbb는 질문답변 게시판 입니다.");
+    }
+
+    @Test
+    void 관련된_question_조회() {
+        Answer a = answerRepository.findById(1L).get();
+
+        Question question = a.getQuestion();
+        assertThat(question.getId()).isEqualTo(1L);
     }
 }

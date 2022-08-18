@@ -18,8 +18,8 @@ public interface RepositoryUtil {
     void truncate();
 
     default void truncateTable() {
-        disableForeignKeyChecks();
-        truncateTable();
-        enableForeignKeyChecks();
+//        disableForeignKeyChecks();
+        truncate();
+//        enableForeignKeyChecks();
     }
 }
