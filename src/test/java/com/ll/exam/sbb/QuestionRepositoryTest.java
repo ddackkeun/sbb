@@ -27,13 +27,7 @@ class QuestionRepositoryTest {
         createSampleData();
     }
 
-    private void clearData() {
-        questionRepository.disableForeignKeyChecks();
-        questionRepository.truncate();
-        questionRepository.enableForeignKeyChecks();
-    }
-
-    private void createSampleData() {
+    public static Long createSampleData(QuestionRepository questionRepository) {
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
         q1.setContent("sbb에 대해서 알고 싶습니다.");
@@ -46,7 +40,21 @@ class QuestionRepositoryTest {
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);    // 두번째 질문 저장
 
-        lastSampleDataId = q2.getId();  // 마지막 데이터 번호 저장
+        return q2.getId();
+    }
+
+    private void createSampleData() {
+        lastSampleDataId = createSampleData(questionRepository);
+    }
+
+    public static void clearData(QuestionRepository questionRepository) {
+        questionRepository.disableForeignKeyChecks();
+        questionRepository.truncate();
+        questionRepository.enableForeignKeyChecks();
+    }
+
+    private void clearData() {
+        clearData(questionRepository);
     }
 
     @Test

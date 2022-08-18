@@ -1,18 +1,10 @@
-package com.ll.exam.sbb;
+package com.ll.exam.sbb.base;
 
-import com.ll.exam.sbb.base.RepositoryUtil;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface AnswerRepository extends JpaRepository<Answer, Long>, RepositoryUtil {
-
-    @Transactional
-    @Modifying
-    @Query(value = "truncate answer", nativeQuery = true)
-    void truncate();
-
+public interface RepositoryUtil {
     @Transactional
     @Modifying
     @Query(value = "SET FOREIGN_KEY_CHECKS = 0", nativeQuery = true)
@@ -22,4 +14,12 @@ public interface AnswerRepository extends JpaRepository<Answer, Long>, Repositor
     @Modifying
     @Query(value = "SET FOREIGN_KEY_CHECKS = 1", nativeQuery = true)
     void enableForeignKeyChecks();
+
+    void truncate();
+
+    default void truncateTable() {
+        disableForeignKeyChecks();
+        truncateTable();
+        enableForeignKeyChecks();
+    }
 }
