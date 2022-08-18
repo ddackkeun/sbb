@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    Question findBySubject(String subject);
+    Optional<Question> findBySubject(String subject);
 
     Question findBySubjectAndContent(String subject, String content);
 
