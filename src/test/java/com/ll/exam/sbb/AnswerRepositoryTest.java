@@ -1,5 +1,9 @@
 package com.ll.exam.sbb;
 
+import com.ll.exam.sbb.answer.Answer;
+import com.ll.exam.sbb.answer.AnswerRepository;
+import com.ll.exam.sbb.question.Question;
+import com.ll.exam.sbb.question.QuestionRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AnswerRepositoryTest {
@@ -46,13 +49,11 @@ class AnswerRepositoryTest {
         a1.setContent("sbb는 질문답변 게시판 입니다.");
         a1.setCreateDate(LocalDateTime.now());
         q.addAnswer(a1);
-        answerRepository.save(a1);
 
         Answer a2 = new Answer();
         a2.setContent("sbb에서는 주로 스프링부트 관련 내용을 다룹니다.");
         a2.setCreateDate(LocalDateTime.now());
         q.addAnswer(a2);
-        answerRepository.save(a2);
 
         questionRepository.save(q);     // answer 반영 내용 저장을 위해 사용
     }
@@ -61,22 +62,26 @@ class AnswerRepositoryTest {
     @Transactional
     @Rollback(false)
     void 저장() {
-        Question question = questionRepository.findById(2L).get();
+        Question q = questionRepository.findById(2L).get();
 
-        Answer answer = new Answer();
-        answer.setContent("네 자동으로 생성됩니다.");
-        answer.setCreateDate(LocalDateTime.now());
-        question.addAnswer(answer);
-        answerRepository.save(answer);
+        Answer a1 = new Answer();
+        a1.setContent("네 자동으로 생성됩니다.");
+        a1.setCreateDate(LocalDateTime.now());
+        q.addAnswer(a1);
+
+        Answer a2 = new Answer();
+        a2.setContent("네 맞습니다.");
+        a2.setCreateDate(LocalDateTime.now());
+        q.addAnswer(a2);
+
+        questionRepository.save(q);
     }
 
     @Test
+    @Transactional
+    @Rollback(false)
     void 조회() {
-        Question q = questionRepository.findById(1L).get();
-
-        Optional<Answer> oa = this.answerRepository.findById(1L);
-        assertThat(oa.isPresent()).isTrue();
-        Answer a = oa.get();
+        Answer a = answerRepository.findById(1L).get();
 
         Assertions.assertThat(a.getContent()).isEqualTo("sbb는 질문답변 게시판 입니다.");
     }
@@ -86,8 +91,8 @@ class AnswerRepositoryTest {
     @Rollback(false)
     void 관련된_question_조회() {
         Answer a = answerRepository.findById(1L).get();
-
         Question question = a.getQuestion();
+
         assertThat(question.getId()).isEqualTo(1L);
     }
 
