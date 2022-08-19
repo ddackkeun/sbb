@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>sbb</title>
@@ -13,11 +13,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr th:each="question : ${questionList}">
+        <tr th:each="question, loop : ${questionList}">
             <td>
-                <span th:text="${question.id}"></span>번
+                [[${loop.count}]] / [[${loop.size}]]
             </td>
-            <td th:text="${question.createDate}"></td>
+            <td>
+                [[${question.subject}]]
+            </td>
+            <td th:text="|Data. ${#strings.substring(question.createDate, 2, 16)}|">
+            </td>
         </tr>
     </tbody>
 </table>
