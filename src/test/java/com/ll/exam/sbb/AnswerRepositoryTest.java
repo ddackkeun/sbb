@@ -44,28 +44,29 @@ class AnswerRepositoryTest {
 
         Answer a1 = new Answer();
         a1.setContent("sbb는 질문답변 게시판 입니다.");
-        a1.setQuestion(q);
         a1.setCreateDate(LocalDateTime.now());
+        q.addAnswer(a1);
         answerRepository.save(a1);
 
         Answer a2 = new Answer();
         a2.setContent("sbb에서는 주로 스프링부트 관련 내용을 다룹니다.");
-        a2.setQuestion(q);
         a2.setCreateDate(LocalDateTime.now());
+        q.addAnswer(a2);
         answerRepository.save(a2);
 
+        questionRepository.save(q);     // answer 반영 내용 저장을 위해 사용
     }
 
     @Test
+    @Transactional
+    @Rollback(false)
     void 저장() {
-        Optional<Question> oq = questionRepository.findById(2L);
-        assertThat(oq.isPresent()).isTrue();
-        Question question = oq.get();
+        Question question = questionRepository.findById(2L).get();
 
         Answer answer = new Answer();
         answer.setContent("네 자동으로 생성됩니다.");
         answer.setCreateDate(LocalDateTime.now());
-        answer.setQuestion(question);
+        question.addAnswer(answer);
         answerRepository.save(answer);
     }
 
@@ -81,6 +82,8 @@ class AnswerRepositoryTest {
     }
 
     @Test
+    @Transactional
+    @Rollback(false)
     void 관련된_question_조회() {
         Answer a = answerRepository.findById(1L).get();
 
