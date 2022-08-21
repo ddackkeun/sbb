@@ -3,20 +3,18 @@ package com.ll.exam.sbb.question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
 import java.util.List;
 
 @Controller
+@RequestMapping("/question")
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/question/list")
+    @GetMapping("/list")
     public String list(Model model) {
         List<Question> questionList = questionService.getList();
 
@@ -24,7 +22,7 @@ public class QuestionController {
         return "/question_list";
     }
 
-    @GetMapping("/question/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String detail(@PathVariable(name = "id") Long id,
                          Model model) {
 
@@ -35,7 +33,7 @@ public class QuestionController {
     }
 
     @ResponseBody
-    @GetMapping("/question/list2")
+    @GetMapping("/list2")
     public String list2() {
         return "하하111777";
     }
