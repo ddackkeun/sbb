@@ -3,6 +3,7 @@ package com.ll.exam.sbb.question;
 import com.ll.exam.sbb.answer.Answer;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
