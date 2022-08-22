@@ -19,7 +19,7 @@ public class QuestionController {
         List<Question> questionList = questionService.getList();
 
         model.addAttribute("questionList", questionList);
-        return "/question_list";
+        return "question_list";
     }
 
     @GetMapping("/detail/{id}")
@@ -29,7 +29,7 @@ public class QuestionController {
         Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
 
-        return "/question_detail";
+        return "question_detail";
     }
 
     @ResponseBody
