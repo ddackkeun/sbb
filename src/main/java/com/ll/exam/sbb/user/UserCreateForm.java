@@ -2,13 +2,14 @@ package com.ll.exam.sbb.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Getter
-@Setter
+@Setter @ToString
 public class UserCreateForm {
 
     @Size(min = 3, max = 25, message = "사용자ID는 3자 이상, 25자 이하로 입력해주세요.")
