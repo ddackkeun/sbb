@@ -2,6 +2,7 @@ package com.ll.exam.sbb;
 
 import com.ll.exam.sbb.question.Question;
 import com.ll.exam.sbb.question.QuestionRepository;
+import com.ll.exam.sbb.user.SiteUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,12 +33,14 @@ class QuestionRepositoryTest {
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
         q1.setContent("sbb에 대해서 알고 싶습니다.");
+        q1.setAuthor(new SiteUser(2L));
         q1.setCreateDate(LocalDateTime.now());
         questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
+        q2.setAuthor(new SiteUser(2L));
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);    // 두번째 질문 저장
 
@@ -61,17 +65,19 @@ class QuestionRepositoryTest {
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
         q1.setContent("sbb에 대해서 알고 싶습니다.");
+        q1.setAuthor(new SiteUser(2L));
         q1.setCreateDate(LocalDateTime.now());
         questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
         q2.setSubject("스프링부트 모델 질문입니다.");
         q2.setContent("id는 자동으로 생성되나요?");
+        q2.setAuthor(new SiteUser(2L));
         q2.setCreateDate(LocalDateTime.now());
         questionRepository.save(q2);  // 두번째 질문 저장
 
-        assertThat(q1.getId()).isGreaterThan(lastSampleDataId + 1);
-        assertThat(q2.getId()).isGreaterThan(lastSampleDataId + 2);
+        assertThat(q1.getId()).isEqualTo(lastSampleDataId + 1);
+        assertThat(q2.getId()).isEqualTo(lastSampleDataId + 2);
     }
 
     @Test
@@ -130,5 +136,21 @@ class QuestionRepositoryTest {
 
 		assertThat(question.getSubject()).isEqualTo("sbb가 무엇인가요?");
 	}
+
+    @Test
+    void createManySampleData() {
+        boolean run = false;
+
+        if(run == false) return ;
+
+        IntStream.rangeClosed(3, 300).forEach(id -> {
+            Question q = new Question();
+            q.setSubject("%d번 질문".formatted(id));
+            q.setContent("%번 질문의 내용".formatted(id));
+            q.setAuthor(new SiteUser(2L));
+            q.setCreateDate(LocalDateTime.now());
+            questionRepository.save(q);
+        });
+    }
 
 }

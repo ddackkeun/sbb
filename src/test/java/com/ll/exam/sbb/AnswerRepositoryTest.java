@@ -4,6 +4,7 @@ import com.ll.exam.sbb.answer.Answer;
 import com.ll.exam.sbb.answer.AnswerRepository;
 import com.ll.exam.sbb.question.Question;
 import com.ll.exam.sbb.question.QuestionRepository;
+import com.ll.exam.sbb.user.SiteUser;
 import com.ll.exam.sbb.user.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,11 +53,13 @@ class AnswerRepositoryTest {
         Answer a1 = new Answer();
         a1.setContent("sbb는 질문답변 게시판 입니다.");
         a1.setCreateDate(LocalDateTime.now());
+        a1.setAuthor(new SiteUser(1L));
         q.addAnswer(a1);
 
         Answer a2 = new Answer();
         a2.setContent("sbb에서는 주로 스프링부트 관련 내용을 다룹니다.");
         a2.setCreateDate(LocalDateTime.now());
+        a2.setAuthor(new SiteUser(2L));
         q.addAnswer(a2);
 
         questionRepository.save(q);     // answer 반영 내용 저장을 위해 사용
@@ -71,11 +74,13 @@ class AnswerRepositoryTest {
         Answer a1 = new Answer();
         a1.setContent("네 자동으로 생성됩니다.");
         a1.setCreateDate(LocalDateTime.now());
+        a1.setAuthor(new SiteUser(2L));
         q.addAnswer(a1);
 
         Answer a2 = new Answer();
         a2.setContent("네 맞습니다.");
         a2.setCreateDate(LocalDateTime.now());
+        a2.setAuthor(new SiteUser(2L));
         q.addAnswer(a2);
 
         questionRepository.save(q);
