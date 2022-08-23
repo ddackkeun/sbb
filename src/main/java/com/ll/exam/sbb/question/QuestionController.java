@@ -1,11 +1,16 @@
 package com.ll.exam.sbb.question;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Enumerated;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Member;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -15,10 +20,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questionList = questionService.getList();
+    public String list(HttpSession session, Model model, @RequestParam(defaultValue = "0") int page) {
 
-        model.addAttribute("questionList", questionList);
+        Object o = session.getAttribute("SPRING_SECURITY_CONTEXT");
+        System.out.println(o);
+
+//        Page<Question> paging = questionService.getList(page);
+//
+//        model.addAttribute("paging", paging);
         return "question_list";
     }
 

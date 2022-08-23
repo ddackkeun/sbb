@@ -15,7 +15,7 @@ import java.util.zip.DataFormatException;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public List<Question> getList() {
+    public List<Question> getList(int page) {
         return questionRepository.findAll();
     }
 
