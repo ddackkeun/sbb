@@ -5,6 +5,7 @@ import com.ll.exam.sbb.answer.AnswerRepository;
 import com.ll.exam.sbb.question.Question;
 import com.ll.exam.sbb.question.QuestionRepository;
 import com.ll.exam.sbb.user.SiteUser;
+import com.ll.exam.sbb.user.UserRepository;
 import com.ll.exam.sbb.user.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +23,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AnswerRepositoryTest {
+
+    @Autowired
+    private UserService userService;
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerRepository answerRepository;
-
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -34,19 +39,16 @@ class AnswerRepositoryTest {
         createSampleData();
     }
 
-    public static void clearData(AnswerRepository answerRepository, QuestionRepository questionRepository) {
-        QuestionRepositoryTest.clearData(questionRepository);
-
-        answerRepository.deleteAll();
-        answerRepository.truncate();
+    public static void clearData(UserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        UserServiceTest.clearData(userRepository, answerRepository, questionRepository);
     }
 
     private void clearData() {
-        clearData(answerRepository, questionRepository);
+        clearData(userRepository, answerRepository, questionRepository);
     }
 
     private void createSampleData() {
-        QuestionRepositoryTest.createSampleData(questionRepository);
+        QuestionRepositoryTest.createSampleData(userService, questionRepository);
 
         Question q = questionRepository.findById(1L).get();
 

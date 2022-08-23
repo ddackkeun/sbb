@@ -1,8 +1,11 @@
 package com.ll.exam.sbb;
 
+import com.ll.exam.sbb.answer.AnswerRepository;
 import com.ll.exam.sbb.question.Question;
 import com.ll.exam.sbb.question.QuestionRepository;
 import com.ll.exam.sbb.user.SiteUser;
+import com.ll.exam.sbb.user.UserRepository;
+import com.ll.exam.sbb.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuestionRepositoryTest {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     private static Long lastSampleDataId;
 
     @BeforeEach
@@ -29,7 +39,9 @@ class QuestionRepositoryTest {
         createSampleData();
     }
 
-    public static Long createSampleData(QuestionRepository questionRepository) {
+    public static Long createSampleData(UserService userService, QuestionRepository questionRepository) {
+        UserServiceTest.createSampleData(userService);
+
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
         q1.setContent("sbb에 대해서 알고 싶습니다.");
@@ -48,16 +60,15 @@ class QuestionRepositoryTest {
     }
 
     private void createSampleData() {
-        lastSampleDataId = createSampleData(questionRepository);
+        lastSampleDataId = createSampleData(userService, questionRepository);
     }
 
-    public static void clearData(QuestionRepository questionRepository) {
-        questionRepository.deleteAll();
-        questionRepository.truncateTable();
+    public static void clearData(UserRepository userRepository, AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        UserServiceTest.clearData(userRepository, answerRepository, questionRepository);
     }
 
     private void clearData() {
-        clearData(questionRepository);
+        clearData(userRepository, answerRepository, questionRepository);
     }
 
     @Test
