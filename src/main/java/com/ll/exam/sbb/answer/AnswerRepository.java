@@ -13,4 +13,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long>, Repositor
     @Query(value = "ALTER TABLE answer AUTO_INCREMENT = 1", nativeQuery = true)
     void truncate();
 
+
 }

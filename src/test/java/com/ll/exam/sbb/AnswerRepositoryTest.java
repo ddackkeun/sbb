@@ -4,6 +4,7 @@ import com.ll.exam.sbb.answer.Answer;
 import com.ll.exam.sbb.answer.AnswerRepository;
 import com.ll.exam.sbb.question.Question;
 import com.ll.exam.sbb.question.QuestionRepository;
+import com.ll.exam.sbb.user.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ class AnswerRepositoryTest {
     @Autowired
     private AnswerRepository answerRepository;
 
-    private int lastSampleDataId;
 
     @BeforeEach
     void beforeEach() {
@@ -33,11 +33,15 @@ class AnswerRepositoryTest {
         createSampleData();
     }
 
-    private void clearData() {
+    public static void clearData(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         QuestionRepositoryTest.clearData(questionRepository);
 
         answerRepository.deleteAll();
-        answerRepository.truncateTable();
+        answerRepository.truncate();
+    }
+
+    private void clearData() {
+        clearData(answerRepository, questionRepository);
     }
 
     private void createSampleData() {
