@@ -37,6 +37,9 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
+    @ManyToMany
+    Set<SiteUser> voter;
+
     public void addAnswer(Answer answer) {
         answer.setQuestion(this);
         answerList.add(answer);

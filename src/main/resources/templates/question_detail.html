@@ -8,8 +8,10 @@
     <!-- 질문 내용 -->
     <div class="card my-3">
         <div class="card-body">
+            <!-- 질문 내용 -->
             <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
 
+            <!-- 질문자, 날짜 -->
             <div class="d-flex justify-content-end">
                 <!-- 질문 수정일 -->
                 <div th:if="${question.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
@@ -24,19 +26,23 @@
                     <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!--  질문 수정  -->
-    <div class="my-3">
-        <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
-           sec:authorize = "isAuthenticated()"
-           th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
-           th:text="수정"></a>
-        <a onclick="if(!confirm('정말로 삭제하시겠습니까?')) return false;" th:href="@{|/question/delete/${question.id}|}"
-           class="btn btn-outline-secondary" sec:authorize="isAuthenticated()"
-           th:if="${question.author!=null and #authentication.getPrincipal().getUsername() == question.author.username}"
-           th:text="삭제"></a>
+            <!-- 질문관련 버튼 -->
+            <div class="my-3">
+                <a onclick="if(!confirm('해당 글을 추천하시겠습니까?')) return false;" class="btn btn-sm btn-outline-secondary"
+                   th:href="@{|/question/vote/${question.id}|}"> 추천
+                   <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
+                </a>
+                <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
+                   sec:authorize = "isAuthenticated()"
+                   th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   th:text="수정"></a>
+                <a onclick="if(!confirm('정말로 삭제하시겠습니까?')) return false;" th:href="@{|/question/delete/${question.id}|}"
+                   class="btn btn-outline-secondary" sec:authorize="isAuthenticated()"
+                   th:if="${question.author!=null and #authentication.getPrincipal().getUsername() == question.author.username}"
+                   th:text="삭제"></a>
+            </div>
+        </div>
     </div>
 
 
