@@ -28,9 +28,8 @@ public class AnswerController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
-    public String createAnswer(@PathVariable(name = "id") Long id,
-                               String content, Model model, Principal principal,
-                               BindingResult bindingResult, @Valid AnswerForm answerForm) {
+    public String createAnswer(Principal principal, Model model, @PathVariable(name = "id") Long id,
+                               @Valid AnswerForm answerForm, BindingResult bindingResult) {
         Question question = questionService.getQuestion(id);
 
         if (bindingResult.hasErrors()) {
@@ -39,9 +38,9 @@ public class AnswerController {
         }
 
         SiteUser siteUser = userService.getUser(principal.getName());
-        answerService.create(question, answerForm.getContent(), siteUser);
 
-        return "redirect:/question/detail/%d".formatted(id);
+        Answer answer = answerService.create(question, answerForm.getContent(), siteUser);
+        return "redirect:/question/detail/%d#answer_%d".formatted(id, answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
