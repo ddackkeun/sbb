@@ -19,7 +19,7 @@ public class Answer {
 
     private LocalDateTime createDate;
 
-    private LocalDateTime modifyData;
+    private LocalDateTime modifyDate;
 
     @ManyToOne
     private Question question;
