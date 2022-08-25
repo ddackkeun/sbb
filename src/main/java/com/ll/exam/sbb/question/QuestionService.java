@@ -30,7 +30,7 @@ public class QuestionService {
         }
 
         // 키워드 검색
-        return questionRepository.findBySubjectContainsOrContentContains(kw, kw, pageable);
+        return questionRepository.findBySubjectContainsOrContentContainsOrAuthor_usernameContainsOrAnswerList_contentContains(kw, kw, kw, kw, pageable);
     }
 
     public Question getQuestion(Long id) {
