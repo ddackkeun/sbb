@@ -3,8 +3,6 @@ package com.ll.exam.sbb.question;
 import com.ll.exam.sbb.DataNotFoundException;
 import com.ll.exam.sbb.user.SiteUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataLocationNotFoundException;
-import org.springframework.boot.context.config.ConfigDataNotFoundAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,21 +12,25 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
-        return questionRepository.findAll(pageable);
+        // 키워드 없으면 전체 검색
+        if (kw == null || kw.trim().length() == 0) {
+            return questionRepository.findAll(pageable);
+        }
+
+        // 키워드 검색
+        return questionRepository.findBySubjectContainsOrContentContains(kw, kw, pageable);
     }
 
     public Question getQuestion(Long id) {
