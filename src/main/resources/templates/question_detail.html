@@ -10,7 +10,6 @@
         <div class="card-body">
             <!-- 질문 내용 -->
             <div class="card-text" th:utext="${@commonUtil.markdown(question.content)}"></div>
-<!--            <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>-->
 
             <!-- 질문자, 날짜 -->
             <div class="d-flex justify-content-end">
@@ -24,7 +23,10 @@
                     <div class="mb-2">
                         <span th:text="${question.author?.username}"></span>
                     </div>
-                    <div th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    <div class="mb-2" th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    <div>
+                        HIT : [[${question.hitCount}]]
+                    </div>
                 </div>
             </div>
 
@@ -77,10 +79,12 @@
 
             <!-- 답변 추천, 수정, 삭제 버튼 -->
             <div class="my-3">
+                <!-- 추천 -->
                 <a onclick="if(!confirm('해당 답변을 추천하시겠습니까?')) return false;" class="btn btn-sm btn-outline-secondary"
                    th:href="@{|/answer/vote/${answer.id}|}"> 추천
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span>
                 </a>
+
                 <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
                    th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}"
