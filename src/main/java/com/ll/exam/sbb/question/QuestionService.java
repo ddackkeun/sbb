@@ -18,9 +18,13 @@ import java.util.List;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public Page<Question> getList(int page, String kw) {
+    public Page<Question> getList(int page, String kw, String sortCode) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+
+        switch (sortCode) {
+            case "OLD" -> sorts.add(Sort.Order.asc("id"));
+            default -> sorts.add(Sort.Order.desc("id"));
+        }
 
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
